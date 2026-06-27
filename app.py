@@ -36,15 +36,39 @@ app.secret_key = os.environ.get("SECRET_KEY", "diet-expert-secret-key-2026-ustyk
 # DATABASE CONFIGURATION
 # Update these values to match your MySQL setup
 # ============================================================
-DB_CONFIG = {
-    "host": os.environ.get("DB_HOST", "localhost"),
-    "user": os.environ.get("DB_USER", "root"),
-    "password": os.environ.get("DB_PASSWORD", ""),
-    "db": os.environ.get("DB_NAME", "diet_expert_system"),
-    "charset": "utf8mb4",
-    "cursorclass": pymysql.cursors.DictCursor,
-    "autocommit": True,
-}
+
+from urllib.parse import urlparse
+
+DATABASE_URL = os.environ.get("DATABASE_URL")
+
+if DATABASE_URL:
+    # ── JIKA ONLINE (DI SERVER RAILWAY & AIVEN) ──
+    # Membersihkan scheme agar bisa dibaca urlparse dengan benar
+    clean_url = DATABASE_URL.replace("mysql+pymysql://", "mysql://")
+    url = urlparse(clean_url)
+
+    DB_CONFIG = {
+        "host": url.hostname,
+        "user": url.username,
+        "password": url.password,
+        "port": url.port or 3306,
+        "db": url.path.lstrip("/"),
+        "charset": "utf8mb4",
+        "cursorclass": pymysql.cursors.DictCursor,
+        "autocommit": True,
+        "ssl_mode": "REQUIRED",  # Aiven Cloud wajib pakai SSL mode REQUIRED
+    }
+else:
+    # ── JIKA LOKAL (DI LAPTOP KAMU) ──
+    DB_CONFIG = {
+        "host": os.environ.get("DB_HOST", "localhost"),
+        "user": os.environ.get("DB_USER", "root"),
+        "password": os.environ.get("DB_PASSWORD", ""),
+        "db": os.environ.get("DB_NAME", "diet_expert_system"),
+        "charset": "utf8mb4",
+        "cursorclass": pymysql.cursors.DictCursor,
+        "autocommit": True,
+    }
 
 
 # ============================================================
