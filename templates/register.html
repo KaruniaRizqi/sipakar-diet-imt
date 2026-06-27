@@ -1,0 +1,306 @@
+{% extends "base.html" %}
+{% block title %}Daftar Akun{% endblock %}
+
+{% block body %}
+<div class="min-h-screen flex">
+
+  <!-- ── LEFT PANEL ── -->
+  <div class="hidden lg:flex lg:w-1/2 hero-gradient flex-col justify-between p-12 relative overflow-hidden">
+    <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-white opacity-5"></div>
+    <div class="absolute bottom-0 -left-16 w-64 h-64 rounded-full bg-medical-500 opacity-10"></div>
+
+    <div class="flex items-center gap-3 z-10">
+      <div class="w-10 h-10 rounded-xl bg-medical-500 flex items-center justify-center shadow-lg">
+        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+        </svg>
+      </div>
+      <span class="text-white font-bold text-lg tracking-tight">SiPakar Diet IMT</span>
+    </div>
+
+    <div class="z-10 space-y-6">
+      <h1 class="font-display text-5xl text-white leading-tight">
+        Mulai Perjalanan<br/>
+        <span class="text-medical-400">Hidup Sehat</span>
+      </h1>
+      <p class="text-white/70 text-lg leading-relaxed max-w-sm">
+        Buat akun gratis Anda dan dapatkan rekomendasi diet personal
+        berdasarkan perhitungan IMT yang akurat.
+      </p>
+
+      <!-- Steps -->
+      <div class="space-y-3 pt-2">
+        {% for step, desc in [
+          ('1', 'Daftar dengan nama & username'),
+          ('2', 'Masukkan data fisik Anda'),
+          ('3', 'Dapatkan rekomendasi diet personal'),
+        ] %}
+        <div class="flex items-center gap-3">
+          <div class="w-7 h-7 rounded-full bg-medical-500 flex items-center justify-center text-white text-xs font-bold shrink-0">
+            {{ step }}
+          </div>
+          <span class="text-white/80 text-sm">{{ desc }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <p class="text-white/40 text-xs z-10">Program Studi Informatika · Fakultas Teknik · UST Yogyakarta</p>
+  </div>
+
+  <!-- ── RIGHT PANEL: Register Form ── -->
+  <div class="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 bg-white overflow-y-auto">
+    <div class="w-full max-w-md py-6">
+
+      <!-- Mobile logo -->
+      <div class="flex lg:hidden items-center gap-2 mb-8">
+        <div class="w-8 h-8 rounded-lg bg-medical-500 flex items-center justify-center">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+          </svg>
+        </div>
+        <span class="font-bold text-slate-800">SiPakar Diet IMT</span>
+      </div>
+
+      <div class="mb-8">
+        <h2 class="font-display text-3xl text-slate-900 mb-1">Buat Akun Baru</h2>
+        <p class="text-slate-500 text-sm">Isi form di bawah untuk mendaftar sebagai pengguna.</p>
+      </div>
+
+      <!-- Flash Messages -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="space-y-2 mb-6">
+          {% for cat, msg in messages %}
+            <div class="flash-msg flash-{{ cat }} flex items-start gap-3 px-4 py-3 rounded-lg text-sm">
+              <span class="mt-0.5 shrink-0">
+                {% if cat == 'success' %}✅{% elif cat == 'danger' %}❌{% elif cat == 'warning' %}⚠️{% else %}ℹ️{% endif %}
+              </span>
+              <span>{{ msg }}</span>
+            </div>
+          {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <!-- Register Form -->
+      <form method="POST" action="{{ url_for('register') }}" id="registerForm" novalidate class="space-y-4">
+
+        <!-- Nama Lengkap -->
+        <div>
+          <label for="nama" class="block text-sm font-medium text-slate-700 mb-1.5">
+            Nama Lengkap <span class="text-red-500">*</span>
+          </label>
+          <div class="relative">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </span>
+            <input type="text" id="nama" name="nama"
+              value="{{ nama or '' }}"
+              placeholder="Contoh: Nurcahyo Syahrul"
+              autocomplete="name"
+              class="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-slate-50
+                     placeholder-slate-400 text-slate-900 transition-all"
+              required minlength="2" />
+          </div>
+          <p class="text-red-500 text-xs mt-1 hidden" id="err-nama"></p>
+        </div>
+
+        <!-- Username -->
+        <div>
+          <label for="username" class="block text-sm font-medium text-slate-700 mb-1.5">
+            Username <span class="text-red-500">*</span>
+          </label>
+          <div class="relative">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+              </svg>
+            </span>
+            <input type="text" id="username" name="username"
+              value="{{ username or '' }}"
+              placeholder="huruf dan angka saja, min. 4 karakter"
+              autocomplete="username"
+              class="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-slate-50
+                     placeholder-slate-400 text-slate-900 transition-all"
+              required minlength="4" pattern="[a-zA-Z0-9]+" />
+          </div>
+          <p class="text-red-500 text-xs mt-1 hidden" id="err-username"></p>
+        </div>
+
+        <!-- Password -->
+        <div>
+          <label for="password" class="block text-sm font-medium text-slate-700 mb-1.5">
+            Password <span class="text-red-500">*</span>
+          </label>
+          <div class="relative">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+              </svg>
+            </span>
+            <input type="password" id="password" name="password"
+              placeholder="Minimal 6 karakter"
+              autocomplete="new-password"
+              class="w-full pl-10 pr-10 py-2.5 border border-slate-200 rounded-xl text-sm bg-slate-50
+                     placeholder-slate-400 text-slate-900 transition-all"
+              required minlength="6" />
+            <button type="button" id="togglePwd1"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7
+                     -1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              </svg>
+            </button>
+          </div>
+          <!-- Password strength -->
+          <div class="mt-2">
+            <div class="flex gap-1">
+              <div class="h-1 flex-1 rounded-full bg-slate-200 transition-all" id="str-1"></div>
+              <div class="h-1 flex-1 rounded-full bg-slate-200 transition-all" id="str-2"></div>
+              <div class="h-1 flex-1 rounded-full bg-slate-200 transition-all" id="str-3"></div>
+            </div>
+            <p class="text-xs text-slate-400 mt-1" id="str-label">Masukkan password</p>
+          </div>
+          <p class="text-red-500 text-xs mt-1 hidden" id="err-password"></p>
+        </div>
+
+        <!-- Confirm Password -->
+        <div>
+          <label for="confirm_password" class="block text-sm font-medium text-slate-700 mb-1.5">
+            Konfirmasi Password <span class="text-red-500">*</span>
+          </label>
+          <div class="relative">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+              </svg>
+            </span>
+            <input type="password" id="confirm_password" name="confirm_password"
+              placeholder="Ulangi password Anda"
+              autocomplete="new-password"
+              class="w-full pl-10 pr-10 py-2.5 border border-slate-200 rounded-xl text-sm bg-slate-50
+                     placeholder-slate-400 text-slate-900 transition-all"
+              required />
+            <button type="button" id="togglePwd2"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7
+                     -1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              </svg>
+            </button>
+          </div>
+          <p class="text-red-500 text-xs mt-1 hidden" id="err-confirm"></p>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" id="registerBtn"
+          class="w-full py-3 px-4 bg-medical-500 hover:bg-medical-600 text-white font-semibold
+                 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md active:scale-[.98]
+                 flex items-center justify-center gap-2 text-sm mt-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+          </svg>
+          Buat Akun Sekarang
+        </button>
+      </form>
+
+      <p class="text-center text-sm text-slate-500 mt-6">
+        Sudah punya akun?
+        <a href="{{ url_for('login') }}" class="text-medical-600 font-semibold hover:text-medical-700 hover:underline">
+          Masuk di sini
+        </a>
+      </p>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const form      = document.getElementById('registerForm');
+  const namaEl    = document.getElementById('nama');
+  const usernameEl= document.getElementById('username');
+  const pwdEl     = document.getElementById('password');
+  const confEl    = document.getElementById('confirm_password');
+
+  /* Password toggle helpers */
+  document.getElementById('togglePwd1').addEventListener('click', () => {
+    pwdEl.type = pwdEl.type === 'text' ? 'password' : 'text';
+  });
+  document.getElementById('togglePwd2').addEventListener('click', () => {
+    confEl.type = confEl.type === 'text' ? 'password' : 'text';
+  });
+
+  /* Password strength meter */
+  pwdEl.addEventListener('input', () => {
+    const v = pwdEl.value;
+    let score = 0;
+    if (v.length >= 6)  score++;
+    if (v.length >= 10) score++;
+    if (/[A-Z]/.test(v) || /[0-9]/.test(v) || /[^a-zA-Z0-9]/.test(v)) score++;
+
+    const colors = ['bg-red-400', 'bg-yellow-400', 'bg-medical-500'];
+    const labels = ['Lemah', 'Sedang', 'Kuat'];
+    for (let i = 1; i <= 3; i++) {
+      const el = document.getElementById(`str-${i}`);
+      el.className = `h-1 flex-1 rounded-full transition-all ${i <= score ? colors[score-1] : 'bg-slate-200'}`;
+    }
+    document.getElementById('str-label').textContent = v.length === 0
+      ? 'Masukkan password'
+      : `Kekuatan: ${labels[score-1] || 'Lemah'}`;
+  });
+
+  /* Client-side validation */
+  const showErr  = (id, msg) => { const e=document.getElementById(id); e.textContent=msg; e.classList.remove('hidden'); };
+  const clearErr = (id)      => { const e=document.getElementById(id); e.textContent='';  e.classList.add('hidden'); };
+
+  form.addEventListener('submit', (e) => {
+    ['err-nama','err-username','err-password','err-confirm'].forEach(clearErr);
+    let valid = true;
+    const fail = (id, msg) => { showErr(id, msg); valid = false; };
+
+    if (!namaEl.value.trim() || namaEl.value.trim().length < 2)
+      fail('err-nama', 'Nama lengkap minimal 2 karakter.');
+
+    const u = usernameEl.value.trim();
+    if (!u || u.length < 4)
+      fail('err-username', 'Username minimal 4 karakter.');
+    else if (!/^[a-zA-Z0-9]+$/.test(u))
+      fail('err-username', 'Username hanya boleh huruf dan angka.');
+
+    if (!pwdEl.value || pwdEl.value.length < 6)
+      fail('err-password', 'Password minimal 6 karakter.');
+
+    if (pwdEl.value !== confEl.value)
+      fail('err-confirm', 'Password dan konfirmasi tidak cocok.');
+
+    if (!valid) { e.preventDefault(); return; }
+
+    const btn = document.getElementById('registerBtn');
+    btn.disabled = true;
+    btn.innerHTML = `<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
+      Memproses...`;
+  });
+});
+</script>
+{% endblock %}
