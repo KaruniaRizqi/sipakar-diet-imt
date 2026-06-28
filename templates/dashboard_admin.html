@@ -142,7 +142,7 @@
           {% for cat, msg in messages %}
             <div class="flash-msg flash-{{ cat }} flex items-start gap-3 px-4 py-3 rounded-xl text-sm">
               <span class="shrink-0">
-                {% if cat == 'success' %}✅{% elif cat == 'danger' %}❌{% elif cat == 'warning' %}⚠️{% else %}ℹ️{% endif %}
+                {% if cat == "success" %}OK{% elif cat == "danger" %}!{% elif cat == "warning" %}!{% else %}i{% endif %}
               </span>
               <span>{{ msg }}</span>
             </div>
@@ -658,7 +658,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeEditMod
 
 /* ── Delete confirmation ── */
 function confirmDelete(id, imt, akt) {
-  const msg = `⚠️ Hapus Aturan #${id}?\n\nKategori: ${imt}\nAktivitas: ${akt}\n\nTindakan ini tidak dapat dibatalkan!`;
+  const msg = `Hapus Aturan #${id}?\n\nKategori: ${imt}\nAktivitas: ${akt}\n\nTindakan ini tidak dapat dibatalkan!`;
   if (!confirm(msg)) return;
 
   const form  = document.getElementById('deleteForm');

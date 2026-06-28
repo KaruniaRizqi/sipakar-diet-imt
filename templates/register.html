@@ -76,7 +76,7 @@
           {% for cat, msg in messages %}
             <div class="flash-msg flash-{{ cat }} flex items-start gap-3 px-4 py-3 rounded-lg text-sm">
               <span class="mt-0.5 shrink-0">
-                {% if cat == 'success' %}✅{% elif cat == 'danger' %}❌{% elif cat == 'warning' %}⚠️{% else %}ℹ️{% endif %}
+                {% if cat == "success" %}OK{% elif cat == "danger" %}!{% elif cat == "warning" %}!{% else %}i{% endif %}
               </span>
               <span>{{ msg }}</span>
             </div>
