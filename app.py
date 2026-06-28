@@ -43,7 +43,6 @@ DATABASE_URL = os.environ.get("DATABASE_URL")
 
 if DATABASE_URL:
     # ── JIKA ONLINE (DI SERVER RAILWAY & AIVEN) ──
-    # Membersihkan scheme agar bisa dibaca urlparse dengan benar
     clean_url = DATABASE_URL.replace("mysql+pymysql://", "mysql://")
     url = urlparse(clean_url)
 
@@ -56,7 +55,7 @@ if DATABASE_URL:
         "charset": "utf8mb4",
         "cursorclass": pymysql.cursors.DictCursor,
         "autocommit": True,
-        "ssl_mode": "REQUIRED",  # Aiven Cloud wajib pakai SSL mode REQUIRED
+        "ssl": {},  # <── GANTI BAGIAN INI (Cukup kasih dict kosong buat aktifin SSL di PyMySQL)
     }
 else:
     # ── JIKA LOKAL (DI LAPTOP KAMU) ──
