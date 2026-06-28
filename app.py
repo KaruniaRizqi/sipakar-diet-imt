@@ -703,7 +703,7 @@ def dashboard_admin():
     # Statistics for dashboard cards
     total_rules = len(rules) if rules else 0
     total_users = query_db(
-        'SELECT COUNT(*) AS cnt FROM `user` WHERE role = "user"', one=True
+        "SELECT COUNT(*) AS cnt FROM `user` WHERE role = 'user'", one=True
     )["cnt"]
     total_consults = query_db("SELECT COUNT(*) AS cnt FROM consultation", one=True)[
         "cnt"
@@ -952,7 +952,7 @@ def create_default_admin():
     """
     try:
         existing = query_db(
-            'SELECT id_user FROM `user` WHERE username = "admin" LIMIT 1', one=True
+            "SELECT id_user FROM `user` WHERE username = 'admin' LIMIT 1", one=True
         )
         if not existing:
             hashed = generate_password_hash("admin123")
